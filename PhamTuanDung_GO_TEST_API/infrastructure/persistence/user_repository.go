@@ -2,12 +2,14 @@ package persistence
 
 import (
 	"errors"
+	"strings"
+	"time"
+
 	"github.com/dungbk10t/test_api/domain/entity"
 	"github.com/dungbk10t/test_api/domain/repository"
 	"github.com/dungbk10t/test_api/infrastructure/security"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
-	"strings"
 )
 
 type UserRepo struct {
@@ -37,40 +39,18 @@ func (r *UserRepo) SaveUser(user *entity.User) (*entity.User, map[string]string)
 	return user, nil
 }
 
-func (r *UserRepo) UpdateInfoUser(user *entity.User) (*entity.User, map[string]string) {
-	dbErr := map[string]string{}
-	err := r.db.Debug().Save(&user).Error
+func (r *UserRepo) UpdateInfoUser(id uint64, u *entity.User) (*entity.User, error) {
+	var user entity.User
+	err := r.db.Debug().Where("id = ?", id).Take(&user).UpdateColumns(map[string]interface{}{
+		"name":       u.Name,  // code here,
+		"email":      u.Email, // code here,
+		"updated_at": time.Now(),
+	}).Error
 	if err != nil {
-		//If the Email is already taken
-		if strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "Duplicate") {
-			dbErr["email_taken"] = "email already taken"
-			dbErr["id_taken"] = "id already taken"
-			return nil, dbErr
-		}
-		//any other db error
-		dbErr["db_error"] = "database error"
-		return nil, dbErr
+		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
-
-//func (r *UserRepo) UpdateInfoUser(u *entity.User) (*entity.User, map[string]string) {
-//	//var user entity.User
-//	dbErr := map[string]string{}
-//	err := r.db.Debug().Where("id = ?", u.ID).Update(&u.Name).Error
-//	if err != nil {
-//		//If the ID, Email is already taken
-//		if strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "Duplicate") {
-//			dbErr["email_taken"] = "email already taken"
-//			//dbErr["id_taken"] = "id already taken"
-//			return nil, dbErr
-//		}
-//		//any other db error
-//		dbErr["db_error"] = "database error"
-//		return nil, dbErr
-//	}
-//	return u, nil
-//}
 
 func (r *UserRepo) GetUser(id uint64) (*entity.User, error) {
 	var user entity.User

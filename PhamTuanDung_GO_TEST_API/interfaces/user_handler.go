@@ -2,12 +2,13 @@ package interfaces
 
 import (
 	"fmt"
+	"net/http"
+	"strconv"
+
 	"github.com/dungbk10t/test_api/application"
 	"github.com/dungbk10t/test_api/domain/entity"
 	"github.com/dungbk10t/test_api/infrastructure/auth"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 //Users struct defines the dependencies that will be used
@@ -49,39 +50,31 @@ func (s *Users) SaveUser(c *gin.Context) {
 }
 
 func (s *Users) UpdateInfoUser(c *gin.Context) {
-
 	userId, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, "")
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	name := c.PostForm("name")
-	if fmt.Sprintf("%T", name) != "string" {
-		c.JSON(http.StatusUnprocessableEntity, "Invalid json")
-	}
-	emptyUser := entity.User{}
-	emptyUser.Name = name
-	var updateUserError = make(map[string]string)
-
-	updateUserError = emptyUser.Validate("update")
-	if len(updateUserError) > 0 {
-		c.JSON(http.StatusUnprocessableEntity, updateUserError)
+	var user entity.User
+	fmt.Print(user)
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"invalid_json": "invalid json",
+		})
 		return
 	}
-
-	user, err := s.us.GetUser(userId)
+	//validate the request:
+	validateErr := user.Validate("update")
+	if len(validateErr) > 0 {
+		c.JSON(http.StatusUnprocessableEntity, validateErr)
+		return
+	}
+	updateUser, err := s.us.UpdateInfoUser(userId, &user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-
-	user.Name = name
-	updatedUser, dbUpdateErr := s.us.UpdateInfoUser(user)
-	if dbUpdateErr != nil {
-		c.JSON(http.StatusInternalServerError, dbUpdateErr)
-		return
-	}
-	c.JSON(http.StatusOK, updatedUser)
+	c.JSON(http.StatusCreated, updateUser.PublicUser())
 }
 
 func (s *Users) GetUsers(c *gin.Context) {

@@ -23,6 +23,12 @@ type PublicUser struct {
 	Name string `gorm:"size:100;not null;" json:"name"`
 }
 
+//type InputUser struct {
+//	Name     string `gorm:"size:100;not null;" json:"name"`
+//	Email    string `gorm:"size:100;not null;unique" json:"email"`
+//	Password string `gorm:"size:100;not null;" json:"password"`
+//}
+
 //BeforeSave is a gorm hook
 func (u *User) BeforeSave() error {
 	hashPassword, err := security.Hash(u.Password)

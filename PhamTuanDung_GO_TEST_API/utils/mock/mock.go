@@ -10,7 +10,7 @@ import (
 //UserAppInterface is a mock user app interface
 type UserAppInterface struct {
 	SaveUserFn                  func(*entity.User) (*entity.User, map[string]string)
-	UpdateInfoUserFn            func(*entity.User) (*entity.User, map[string]string)
+	UpdateInfoUserFn            func(uint64, *entity.User) (*entity.User, error)
 	GetUsersFn                  func() ([]entity.User, error)
 	GetUserFn                   func(uint64) (*entity.User, error)
 	DeleteUserFn                func(uint64) error
@@ -22,8 +22,8 @@ func (u *UserAppInterface) SaveUser(user *entity.User) (*entity.User, map[string
 	return u.SaveUserFn(user)
 }
 
-func (u *UserAppInterface) UpdateInfoUser(user *entity.User) (*entity.User, map[string]string) {
-	return u.UpdateInfoUserFn(user)
+func (u *UserAppInterface) UpdateInfoUser(userId uint64, user *entity.User) (*entity.User, error) {
+	return u.UpdateInfoUserFn(userId, user)
 }
 
 //GetUsersFn calls the GetUsers
