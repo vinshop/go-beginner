@@ -42,8 +42,19 @@ func (r *UserRepo) SaveUser(user *entity.User) (*entity.User, map[string]string)
 func (r *UserRepo) UpdateInfoUser(id uint64, u *entity.User) (*entity.User, error) {
 	var user entity.User
 	err := r.db.Debug().Where("id = ?", id).Take(&user).UpdateColumns(map[string]interface{}{
-		"name":       u.Name,  // code here,
-		"email":      u.Email, // code here,
+		"name":       u.Name, // code here,
+		"updated_at": time.Now(),
+	}).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *UserRepo) UpdatePassWordUser(id uint64, u *entity.User) (*entity.User, error) {
+	var user entity.User
+	err := r.db.Debug().Where("id = ?", id).Take(&user).UpdateColumns(map[string]interface{}{
+		"password":   u.Password, // code here,
 		"updated_at": time.Now(),
 	}).Error
 	if err != nil {

@@ -21,13 +21,8 @@ type User struct {
 type PublicUser struct {
 	ID   uint64 `gorm:"primary_key;auto_increment" json:"id"`
 	Name string `gorm:"size:100;not null;" json:"name"`
+	//Password string `gorm:"size:100;not null;" json:"password"`
 }
-
-//type InputUser struct {
-//	Name     string `gorm:"size:100;not null;" json:"name"`
-//	Email    string `gorm:"size:100;not null;unique" json:"email"`
-//	Password string `gorm:"size:100;not null;" json:"password"`
-//}
 
 //BeforeSave is a gorm hook
 func (u *User) BeforeSave() error {
@@ -55,6 +50,7 @@ func (u *User) PublicUser() interface{} {
 	return &PublicUser{
 		ID:   u.ID,
 		Name: u.Name,
+		//Password: u.Password,
 	}
 }
 

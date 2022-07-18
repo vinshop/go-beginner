@@ -58,15 +58,16 @@ func main() {
 
 	//user routes
 	r.POST("/api/users", users.SaveUser)
-	r.PUT("/api/users", users.UpdateInfoUser)
+	r.PUT("/api/user/:user_id", users.UpdateInfoUser)
+	r.PUT("/api/user/password/:user_id", users.UpdatePassWordUser)
 	r.GET("/api/users", middleware.AuthMiddleware(), users.GetUsers)
-	r.GET("/api/users/:user_id", users.GetUser)
-	r.DELETE("/api/users/:user_id", users.DeleteUser)
+	r.GET("/api/user/:user_id", users.GetUser)
+	r.DELETE("/api/user/:user_id", users.DeleteUser)
 
 	//authentication routes
 	r.POST("/api/auth/login", authenticate.Login)
 	r.POST("/api/auth//logout", authenticate.Logout)
-	r.POST("/api/auth/refresh", authenticate.Refresh)
+	r.POST("/api/auth/refresh-token", authenticate.Refresh)
 
 	//Starting the application
 	app_port := os.Getenv("PORT") //using heroku host

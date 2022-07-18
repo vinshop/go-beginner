@@ -52,29 +52,25 @@ func Test_SaveUser_Invalidating_Data(t *testing.T) {
 		statusCode int
 	}{
 		{
-			inputJSON:  `{"first_name": "", "last_name": "steven","email": "steven@example.com","password": "password"}`,
+			inputJSON:  `{"name": "","email": "dung14@gmail.com","password": "123456"}`,
 			statusCode: 422,
 		},
 		{
-			inputJSON:  `{"first_name": "victor", "last_name": "","email": "steven@example.com","password": "password"}`,
+			inputJSON:  `{"name": "dung14","email": "","password": "123456"}`,
 			statusCode: 422,
 		},
 		{
-			inputJSON:  `{"first_name": "victor", "last_name": "steven","email": "","password": "password"}`,
-			statusCode: 422,
-		},
-		{
-			inputJSON:  `{"first_name": "victor", "last_name": "steven","email": "steven@example.com","password": ""}`,
+			inputJSON:  `{"name": "dung14","email": "dung14@gmail.com","password": ""}`,
 			statusCode: 422,
 		},
 		{
 			//invalid email
-			inputJSON:  `{"email": "stevenexample.com","password": ""}`,
+			inputJSON:  `{"email": "dung14gmail.com","password": ""}`,
 			statusCode: 422,
 		},
 		{
 			//When instead a string an integer is supplied, When attempting to unmarshal input to the user struct, it will fail
-			inputJSON:  `{"first_name": 1234, "last_name": "steven","email": "steven@example.com","password": "password"}`,
+			inputJSON:  `{"name": "124151","email": "dung14gmail.com","password": "123456"}`,
 			statusCode: 422,
 		},
 	}
@@ -201,7 +197,7 @@ func TestGetUser_Success(t *testing.T) {
 	}
 	r := gin.Default()
 	userId := strconv.Itoa(1)
-	r.GET("/users/:user_id", s.GetUser)
+	r.GET("/user/:user_id", s.GetUser)
 
 	req, err := http.NewRequest(http.MethodGet, "/users/"+userId, nil)
 	if err != nil {

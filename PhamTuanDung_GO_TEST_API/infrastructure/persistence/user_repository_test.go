@@ -106,3 +106,19 @@ func TestGetUserByEmailAndPassword_Success(t *testing.T) {
 	assert.EqualValues(t, u.Email, user.Email)
 	// the password from database should not be equal to a plane password, because it is hashed
 }
+
+func TestDeleteUser_Success(t *testing.T) {
+	conn, err := DBConn()
+	if err != nil {
+		t.Fatalf("want non error, got %#v", err)
+	}
+	food, err := seedUser(conn)
+	if err != nil {
+		t.Fatalf("want non error, got %#v", err)
+	}
+	repo := NewUserRepository(conn)
+
+	deleteErr := repo.DeleteUser(food.ID)
+
+	assert.Nil(t, deleteErr)
+}

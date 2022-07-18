@@ -11,6 +11,7 @@ import (
 type UserAppInterface struct {
 	SaveUserFn                  func(*entity.User) (*entity.User, map[string]string)
 	UpdateInfoUserFn            func(uint64, *entity.User) (*entity.User, error)
+	UpdatePassWordUserFn        func(uint64, *entity.User) (*entity.User, error)
 	GetUsersFn                  func() ([]entity.User, error)
 	GetUserFn                   func(uint64) (*entity.User, error)
 	DeleteUserFn                func(uint64) error
@@ -24,6 +25,10 @@ func (u *UserAppInterface) SaveUser(user *entity.User) (*entity.User, map[string
 
 func (u *UserAppInterface) UpdateInfoUser(userId uint64, user *entity.User) (*entity.User, error) {
 	return u.UpdateInfoUserFn(userId, user)
+}
+
+func (u *UserAppInterface) UpdatePassWordUser(userId uint64, user *entity.User) (*entity.User, error) {
+	return u.UpdatePassWordUserFn(userId, user)
 }
 
 //GetUsersFn calls the GetUsers

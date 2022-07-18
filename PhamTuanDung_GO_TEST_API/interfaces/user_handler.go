@@ -1,7 +1,6 @@
 package interfaces
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -56,7 +55,6 @@ func (s *Users) UpdateInfoUser(c *gin.Context) {
 		return
 	}
 	var user entity.User
-	fmt.Print(user)
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"invalid_json": "invalid json",
@@ -70,6 +68,33 @@ func (s *Users) UpdateInfoUser(c *gin.Context) {
 		return
 	}
 	updateUser, err := s.us.UpdateInfoUser(userId, &user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusCreated, updateUser.PublicUser())
+}
+
+func (s *Users) UpdatePassWordUser(c *gin.Context) {
+	userId, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	var user entity.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"invalid_json": "invalid json",
+		})
+		return
+	}
+	//validate the request:
+	validateErr := user.Validate("update")
+	if len(validateErr) > 0 {
+		c.JSON(http.StatusUnprocessableEntity, validateErr)
+		return
+	}
+	updateUser, err := s.us.UpdatePassWordUser(userId, &user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

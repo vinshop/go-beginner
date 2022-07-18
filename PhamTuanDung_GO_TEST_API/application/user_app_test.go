@@ -1,9 +1,10 @@
 package application
 
 import (
+	"testing"
+
 	"github.com/dungbk10t/test_api/domain/entity"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 var (
@@ -12,7 +13,7 @@ var (
 	getUserRepo                 func(userId uint64) (*entity.User, error)
 	getUsersRepo                func() ([]entity.User, error)
 	getUserEmailAndPasswordRepo func(user *entity.User) (*entity.User, map[string]string)
-	deleteUserRepo              func(userId uint64) (*entity.User, error)
+	deleteUserRepo              func(userId uint64) error
 )
 
 type fakeUserRepo struct{}
@@ -30,7 +31,7 @@ func (u *fakeUserRepo) GetUser(userId uint64) (*entity.User, error) {
 func (u *fakeUserRepo) GetUsers() ([]entity.User, error) {
 	return getUsersRepo()
 }
-func (u *fakeUserRepo) DeleteUser(userId uint64) (*entity.User, error) {
+func (u *fakeUserRepo) DeleteUser(userId uint64) error {
 	return deleteUserRepo(userId)
 }
 
@@ -100,27 +101,13 @@ func TestGetUser_Success(t *testing.T) {
 }
 
 func TestDeleteUser_Success(t *testing.T) {
-	deleteUserRepo = func(userId uint64) (*entity.User, error) {
-		return &entity.User{
-			ID:       1,
-			Name:     "dung06",
-			Email:    "dung06@example.com",
-			Password: "123456",
-		}, nil
-	}
-	user := &entity.User{
-		ID:       1,
-		Name:     "dung06",
-		Email:    "dung06@example.com",
-		Password: "123456",
+	deleteUserRepo = func(userId uint64) error {
+		return nil
 	}
 	userId := uint64(1)
-	u, err := userAppFake.UpdateInfoUser(userId, user)
+	err := userAppFake.DeleteUser(userId)
 	assert.Nil(t, err)
-	assert.EqualValues(t, u.Name, "dung06")
-	assert.EqualValues(t, u.Email, "dung06@gmail.com")
 }
-
 func TestGetUsers_Success(t *testing.T) {
 	getUsersRepo = func() ([]entity.User, error) {
 		return []entity.User{
