@@ -1,6 +1,6 @@
 ### SIMPLE GO RESTFUL API
 
-This is simple restful api practice with go us:
+This is simple restful api practice with golang with:
 1. **Gin Framework**
 2. **Gorm**
 3. **Redis**
@@ -76,16 +76,16 @@ $ sudo systemctl start redis-server
 
 ### HTTP METHODS 
 
-| METHOD | DESCRIPTION             | ENDPOINTS                        |
-|--------|-------------------------|----------------------------------|
-| GET    | GET ALL USERS           | `{{}}/api/users`                 |
-| GET    | GET AN USER BY ID       | `{{}}/api/user/:user_id`         |
-| POST   | CREATE NEW USER         | `{{}}/api/users`                 |
-| POST   | LOGIN USER              | `{{}}/api/auth/login`            |
-| POST   | REFRESH TOKEN           | `{{}}/api/auth/refresh`          |
-| DEL    | DELETE AN USER BY ID    | `{{}}/api/user/:user_id`         |
-| PUT    | UPDATE AN INFO USER     | `{{}}/api/user/:user_id`         |
-| PUT    | UPDATE AN PASSWORD USER | `{{}}/api/user/password:user_id` |
+| METHOD | DESCRIPTION             | ENDPOINTS                         |
+|--------|-------------------------|-----------------------------------|
+| GET    | GET ALL USERS           | `{{}}/api/users`                  |
+| GET    | GET AN USER BY ID       | `{{}}/api/user/:user_id`          |
+| POST   | CREATE NEW USER         | `{{}}/api/users`                  |
+| POST   | LOGIN USER              | `{{}}/api/auth/login`             |
+| POST   | REFRESH TOKEN           | `{{}}/api/auth/refresh`           |
+| DEL    | DELETE AN USER BY ID    | `{{}}/api/user/:user_id`          |
+| PUT    | UPDATE AN INFO USER     | `{{}}/api/user/:user_id`          |
+| PUT    | UPDATE AN PASSWORD USER | `{{}}/api/user/password/:user_id` |
 
 ### TEST API EXAMPLE
 
