@@ -10,6 +10,7 @@ import (
 var (
 	saveUserRepo                func(user *entity.User) (*entity.User, map[string]string)
 	updateInfoUserRepo          func(userId uint64, user *entity.User) (*entity.User, error)
+	updatePassWordUserRepo      func(userId uint64, user *entity.User) (*entity.User, error)
 	getUserRepo                 func(userId uint64) (*entity.User, error)
 	getUsersRepo                func() ([]entity.User, error)
 	getUserEmailAndPasswordRepo func(user *entity.User) (*entity.User, map[string]string)
@@ -25,6 +26,11 @@ func (u *fakeUserRepo) SaveUser(user *entity.User) (*entity.User, map[string]str
 func (u *fakeUserRepo) UpdateInfoUser(userId uint64, user *entity.User) (*entity.User, error) {
 	return updateInfoUserRepo(userId, user)
 }
+
+func (u *fakeUserRepo) UpdatePassWordUser(userId uint64, user *entity.User) (*entity.User, error) {
+	return updatePassWordUserRepo(userId, user)
+}
+
 func (u *fakeUserRepo) GetUser(userId uint64) (*entity.User, error) {
 	return getUserRepo(userId)
 }
@@ -46,14 +52,14 @@ func TestSaveUser_Success(t *testing.T) {
 		return &entity.User{
 			ID:       1,
 			Name:     "dung01",
-			Email:    "dung01@example.com",
+			Email:    "dung01@gmail.com",
 			Password: "123456",
 		}, nil
 	}
 	user := &entity.User{
 		ID:       1,
 		Name:     "dung01",
-		Email:    "dung01@example.com",
+		Email:    "dung01@gmail.com",
 		Password: "123456",
 	}
 	u, err := userAppFake.SaveUser(user)
@@ -67,14 +73,14 @@ func TestUpdateInfoUser_Success(t *testing.T) {
 		return &entity.User{
 			ID:       1,
 			Name:     "dung01",
-			Email:    "dung01@example.com",
+			Email:    "dung01@gmail.com",
 			Password: "123456",
 		}, nil
 	}
 	user := &entity.User{
 		ID:       1,
 		Name:     "dung01",
-		Email:    "dung01@example.com",
+		Email:    "dung01@gmail.com",
 		Password: "123456",
 	}
 	userId := uint64(1)
@@ -84,12 +90,34 @@ func TestUpdateInfoUser_Success(t *testing.T) {
 	assert.EqualValues(t, u.Email, "dung01@gmail.com")
 }
 
+func TestUpdatePassWordUser_Success(t *testing.T) {
+	updatePassWordUserRepo = func(userId uint64, user *entity.User) (*entity.User, error) {
+		return &entity.User{
+			ID:       1,
+			Name:     "dung01",
+			Email:    "dung01@gmail.com",
+			Password: "123456",
+		}, nil
+	}
+	user := &entity.User{
+		ID:       1,
+		Name:     "dung01",
+		Email:    "dung01@gmail.com",
+		Password: "123456",
+	}
+	userId := uint64(1)
+	u, err := userAppFake.UpdatePassWordUser(userId, user)
+	assert.Nil(t, err)
+	assert.EqualValues(t, u.Password, "123456")
+	assert.EqualValues(t, u.Email, "dung01@gmail.com")
+}
+
 func TestGetUser_Success(t *testing.T) {
 	getUserRepo = func(userId uint64) (*entity.User, error) {
 		return &entity.User{
 			ID:       1,
 			Name:     "dung01",
-			Email:    "dung01@example.com",
+			Email:    "dung01@gmail.com",
 			Password: "123456",
 		}, nil
 	}
@@ -114,13 +142,13 @@ func TestGetUsers_Success(t *testing.T) {
 			{
 				ID:       1,
 				Name:     "dung01",
-				Email:    "dung01@example.com",
+				Email:    "dung01@gmail.com",
 				Password: "123456",
 			},
 			{
 				ID:       2,
 				Name:     "dung02",
-				Email:    "dung02@example.com",
+				Email:    "dung02@gmail.com",
 				Password: "123456",
 			},
 		}, nil
@@ -136,14 +164,14 @@ func TestGetUserByEmailAndPassword_Success(t *testing.T) {
 		return &entity.User{
 			ID:       1,
 			Name:     "dung01",
-			Email:    "dung01@example.com",
+			Email:    "dung01@gmail.com",
 			Password: "123456",
 		}, nil
 	}
 	user := &entity.User{
 		ID:       1,
 		Name:     "dung01",
-		Email:    "dung01@example.com",
+		Email:    "dung01@gmail.com",
 		Password: "123456",
 	}
 	u, err := userAppFake.GetUserByEmailAndPassword(user)

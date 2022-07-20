@@ -181,13 +181,23 @@ API
 ```
 http://localhost:8080/api/auth/refresh-token
 ```
+Input
 ```
 {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdXVpZCI6IjhkMzE0YWU3LTU4YTgtNGIyNi1iYzkyLWNmOTFiZmQ4MmQ2MyIsImF1dGhvcml6ZWQiOnRydWUsImV4cCI6MTY1ODEzMDI0NCwidXNlcl9pZCI6MTR9.1piFPuNCDpV4M9wxkyNwQDNX27kG9FoYwBBZoFDZMDM"
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdXVpZCI6ImM3OTA5OGExLWQ4ZWItNGZhNi1hYzg4LTM1YTMyMDcxMmRmYiIsImF1dGhvcml6ZWQiOnRydWUsImV4cCI6MTY1ODI5OTE2OCwidXNlcl9pZCI6MTExfQ.KBYQQna5YoGV_u4j0-cu4mDwewjCUyJmsf-4fhon0W8",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTg5MDMwNjgsInJlZnJlc2hfdXVpZCI6ImM3OTA5OGExLWQ4ZWItNGZhNi1hYzg4LTM1YTMyMDcxMmRmYisrMTExIiwidXNlcl9pZCI6MTExfQ.2JtvPhV1kbUn19-IWXjGYURnZbMBR7T0QQzHA-xHHlw"
 }
 ```
+Response new token
+```
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdXVpZCI6ImY0MWMwM2ExLTNlYTYtNGQ4MC1hMDlkLWZkODg2ODA3YmU2ZSIsImF1dGhvcml6ZWQiOnRydWUsImV4cCI6MTY1ODI5OTI2MywidXNlcl9pZCI6MTExfQ.pbAq5EX633QhGC0MyFkcUuUM5fYEqQMBeT1QMgA1NO4",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTg5MDMxNjMsInJlZnJlc2hfdXVpZCI6ImY0MWMwM2ExLTNlYTYtNGQ4MC1hMDlkLWZkODg2ODA3YmU2ZSsrMTExIiwidXNlcl9pZCI6MTExfQ.uCXL_gLd5nBFLSaOXGrWB4KjnZXdA1Yws0PEJSpA9mg"
+}
+```
+![screenshot-1](Image_Readme/5.png)<br />
 #### 6. DELETE AN USER BY ID
-Delete user who have id = 13
+Delete user who have id = 13 <br />
 API
 ```
 http://localhost:8080/api/user/13
@@ -240,5 +250,7 @@ JSON Response
 ```
 ![screenshot-1](Image_Readme/8.png)<br />
 
+### UNIT TEST
+Example unit test at [Here]()
 
 

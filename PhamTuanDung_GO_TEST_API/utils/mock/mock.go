@@ -3,7 +3,6 @@ package mock
 import (
 	"github.com/dungbk10t/test_api/domain/entity"
 	"github.com/dungbk10t/test_api/infrastructure/auth"
-	"mime/multipart"
 	"net/http"
 )
 
@@ -84,10 +83,10 @@ func (f *TokenInterface) ExtractTokenMetadata(r *http.Request) (*auth.AccessDeta
 	return f.ExtractTokenMetadataFn(r)
 }
 
-type UploadFileInterface struct {
-	UploadFileFn func(file *multipart.FileHeader) (string, error)
-}
-
-func (up *UploadFileInterface) UploadFile(file *multipart.FileHeader) (string, error) {
-	return up.UploadFileFn(file)
-}
+//type UploadFileInterface struct {
+//	UploadFileFn func(file *multipart.FileHeader) (string, error)
+//}
+//
+//func (up *UploadFileInterface) UploadFile(file *multipart.FileHeader) (string, error) {
+//	return up.UploadFileFn(file)
+//}

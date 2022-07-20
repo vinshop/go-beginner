@@ -14,7 +14,7 @@ func DBConn() (*gorm.DB, error) {
 		var err error
 		err = godotenv.Load(os.ExpandEnv("./../../.env"))
 		if err != nil {
-			log.Fatalln("Error getting env %v\n", err)
+			log.Fatalf("Error getting env %v\n", err)
 		}
 		return LocalDatabase()
 	}
@@ -35,14 +35,21 @@ func CIBuild() (*gorm.DB, error) {
 //local DB
 func LocalDatabase() (*gorm.DB, error) {
 	var err error
-	dbdriver := os.Getenv("TEST_DB_DRIVER")
-	host := os.Getenv("TEST_DB_HOST")
-	password := os.Getenv("TEST_DB_PASSWORD")
-	user := os.Getenv("TEST_DB_USER")
-	dbname := os.Getenv("TEST_DB_NAME")
-	port := os.Getenv("TEST_DB_PORT")
+	//dbdriver := os.Getenv("TEST_DB_DRIVER")
+	//host := os.Getenv("TEST_DB_HOST")
+	//password := os.Getenv("TEST_DB_PASSWORD")
+	//user := os.Getenv("TEST_DB_USER")
+	//dbname := os.Getenv("TEST_DB_NAME")
+	//port := os.Getenv("TEST_DB_PORT")
 
-	DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbname)
+	dbdriver := "mysql"
+	dbhost := "127.0.0.1"
+	dbpassword := "123456789aA@"
+	dbuser := "dev"
+	dbname := "user_04"
+	dbport := "3306"
+
+	DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbuser, dbpassword, dbhost, dbport, dbname)
 	conn, err := gorm.Open(dbdriver, DBURL)
 	if err != nil {
 		return nil, err
@@ -63,9 +70,9 @@ func LocalDatabase() (*gorm.DB, error) {
 
 func seedUser(db *gorm.DB) (*entity.User, error) {
 	user := &entity.User{
-		ID:        1,
-		Name:      "dung01",
-		Email:     "dung01@example.com",
+		ID:        100,
+		Name:      "dung100",
+		Email:     "dung100@gmail.com",
 		Password:  "123456",
 		DeletedAt: nil,
 	}
@@ -93,7 +100,7 @@ func seedUsers(db *gorm.DB) ([]entity.User, error) {
 			DeletedAt: nil,
 		},
 		{
-			ID:        2,
+			ID:        3,
 			Name:      "dung03",
 			Email:     "dung03@example.com",
 			Password:  "123456",

@@ -58,8 +58,8 @@ func main() {
 
 	//user routes
 	r.POST("/api/users", users.SaveUser)
-	r.PUT("/api/user/:user_id", users.UpdateInfoUser)
-	r.PUT("/api/user/password/:user_id", users.UpdatePassWordUser)
+	r.PUT("/api/user/:user_id", middleware.AuthMiddleware(), users.UpdateInfoUser)
+	r.PUT("/api/user/password/:user_id", middleware.AuthMiddleware(), users.UpdatePasswordUser)
 	r.GET("/api/users", middleware.AuthMiddleware(), users.GetUsers)
 	r.GET("/api/user/:user_id", users.GetUser)
 	r.DELETE("/api/user/:user_id", users.DeleteUser)

@@ -14,9 +14,7 @@ import (
 	"testing"
 )
 
-//IF YOU HAVE TIME, YOU CAN TEST ALL FAILURE CASES TO IMPROVE COVERAGE
-
-//We dont need to mock the application layer, because we won't get there. So we will use table test to cover all validation errors
+//Don't use mock, use table test to cover all validation errors
 func Test_Login_Invalid_Data(t *testing.T) {
 	samples := []struct {
 		inputJSON  string
@@ -24,17 +22,17 @@ func Test_Login_Invalid_Data(t *testing.T) {
 	}{
 		{
 			//empty email
-			inputJSON:  `{"email": "","password": "password"}`,
+			inputJSON:  `{"email": "","password": "123456"}`,
 			statusCode: 422,
 		},
 		{
 			//empty password
-			inputJSON:  `{"email": "steven@example.com","password": ""}`,
+			inputJSON:  `{"email": "dung01@gmail.com","password": ""}`,
 			statusCode: 422,
 		},
 		{
 			//invalid email
-			inputJSON:  `{"email": "stevenexample.com","password": ""}`,
+			inputJSON:  `{"email": "dung01com","password": ""}`,
 			statusCode: 422,
 		},
 	}
@@ -92,7 +90,7 @@ func Test_Login_Success(t *testing.T) {
 		return nil
 	}
 
-	inputJSON := `{"email": "steven@example.com","password": "password"}`
+	inputJSON := `{"email": "dung01@gmail.com.com","password": "123456"}`
 	r := gin.Default()
 	r.POST("/login", au.Login)
 	req, err := http.NewRequest(http.MethodPost, "/login", bytes.NewBufferString(inputJSON))
@@ -113,8 +111,7 @@ func Test_Login_Success(t *testing.T) {
 	assert.Equal(t, rr.Code, http.StatusOK)
 	assert.EqualValues(t, response["access_token"], "this-is-the-access-token")
 	assert.EqualValues(t, response["refresh_token"], "this-is-the-refresh-token")
-	assert.EqualValues(t, response["first_name"], "victor")
-	assert.EqualValues(t, response["last_name"], "steven")
+	assert.EqualValues(t, response["name"], "dung01")
 }
 
 func TestLogout_Success(t *testing.T) {
@@ -130,7 +127,7 @@ func TestLogout_Success(t *testing.T) {
 		return nil
 	}
 	//This can be anything, since we have already mocked the method that checks if the token is valid or not and have told it what to return for us.
-	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdXVpZCI6IjgyYTM3YWE5LTI4MGMtNDQ2OC04M2RmLTZiOGYyMDIzODdkMyIsImF1dGhvcml6ZWQiOnRydWUsInVzZXJfaWQiOjF9.ESelxq-UHormgXUwRNe4_Elz2i__9EKwCXPsNCyKV5o"
+	token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdXVpZCI6ImEzNmIwZjJmLWM5ODctNDk0My05MjBiLWVjNDc2ZGNjMTAzYyIsImF1dGhvcml6ZWQiOnRydWUsImV4cCI6MTY1ODI5MjA3MSwidXNlcl9pZCI6MTA4fQ.bEfJDdBx1rq3KSNshvCM8cK1utMCtLgx5jQLl92r9NU"
 
 	tokenString := fmt.Sprintf("Bearer %v", token)
 
@@ -180,7 +177,7 @@ func TestRefresh_Success(t *testing.T) {
 	os.Setenv("REFRESH_SECRET", "786dfdbjhsb")
 
 	inputJSON := `{
-		"refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWZyZXNoX3V1aWQiOiI4MzJjODgyMS0wMzUyLTRjN2EtOTZjNi04MzM5YzBlZjJkZTkrKzE0IiwidXNlcl9pZCI6MTR9.Sd6IOmvbgwf825jlQxt7A-sDpOK1vubUVoxCQuvtC_A"
+		"refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTg4OTU5NzEsInJlZnJlc2hfdXVpZCI6ImEzNmIwZjJmLWM5ODctNDk0My05MjBiLWVjNDc2ZGNjMTAzYysrMTA4IiwidXNlcl9pZCI6MTA4fQ.wB1tLQjlV8w8YNZvdSkk-MkI5DbA4UxaQdtAtWke5lc"
 		}`
 	req, err := http.NewRequest(http.MethodPost, "/refresh", bytes.NewBufferString(inputJSON))
 	if err != nil {

@@ -52,20 +52,20 @@ func Test_SaveUser_Invalidating_Data(t *testing.T) {
 		statusCode int
 	}{
 		{
-			inputJSON:  `{"name": "","email": "dung14@gmail.com","password": "123456"}`,
+			inputJSON:  `{"name":"","email":"dung14@gmail.com","password":"123456"}`,
 			statusCode: 422,
 		},
 		{
-			inputJSON:  `{"name": "dung14","email": "","password": "123456"}`,
+			inputJSON:  `{"name": "dung14","email": "","password":"123456"}`,
 			statusCode: 422,
 		},
 		{
-			inputJSON:  `{"name": "dung14","email": "dung14@gmail.com","password": ""}`,
+			inputJSON:  `{"name":"dung14","email":"dung14@gmail.com","password":""}`,
 			statusCode: 422,
 		},
 		{
 			//invalid email
-			inputJSON:  `{"email": "dung14gmail.com","password": ""}`,
+			inputJSON:  `{"name":"dung14","email":"dung14gmail.com","password":""}`,
 			statusCode: 422,
 		},
 		{
@@ -116,7 +116,8 @@ func Test_SaveUser_Invalidating_Data(t *testing.T) {
 	}
 }
 
-//One of such db error is invalid email, it return that from the application and test.
+// Return case creating email : error existing email in DB,when create new user.
+// Note : Error code 422 : invalid JSON (Not enough ",")
 func TestSaveUser_DB_Error(t *testing.T) {
 	//application.UserApp = &fakeUserApp{}
 	userApp.SaveUserFn = func(*entity.User) (*entity.User, map[string]string) {
@@ -127,10 +128,9 @@ func TestSaveUser_DB_Error(t *testing.T) {
 	r := gin.Default()
 	r.POST("/users", s.SaveUser)
 	inputJSON := `{
-		"first_name": "victor",
-		"last_name": "steven",
-		"email": "steven@example.com",
-		"password": "password"
+		"name":"dung01",
+		"email": "dung01@gmail.com",
+		"password": "123456"
 	}`
 	req, err := http.NewRequest(http.MethodPost, "/users", bytes.NewBufferString(inputJSON))
 	if err != nil {
@@ -153,7 +153,6 @@ func TestSaveUser_DB_Error(t *testing.T) {
 //GetUsers Test
 func TestGetUsers_Success(t *testing.T) {
 	userApp.GetUsersFn = func() ([]entity.User, error) {
-		//remember we are running sensitive info such as email and password
 		return []entity.User{
 			{
 				ID:   1,
@@ -191,15 +190,15 @@ func TestGetUser_Success(t *testing.T) {
 	userApp.GetUserFn = func(uint64) (*entity.User, error) {
 		//remember we are running sensitive info such as email and password
 		return &entity.User{
-			ID:   1,
+			ID:   111,
 			Name: "dung01",
 		}, nil
 	}
 	r := gin.Default()
-	userId := strconv.Itoa(1)
+	userId := strconv.Itoa(111)
 	r.GET("/user/:user_id", s.GetUser)
-
-	req, err := http.NewRequest(http.MethodGet, "/users/"+userId, nil)
+	// Note : Tra ve loi 404 la do duong dan URL sai, check ky, sua lai "/users/"+userId --> "/user/"+userId
+	req, err := http.NewRequest(http.MethodGet, "/user/"+userId, nil)
 	if err != nil {
 		t.Errorf("this is the error: %v\n", err)
 	}

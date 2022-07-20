@@ -75,7 +75,7 @@ func (s *Users) UpdateInfoUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, updateUser.PublicUser())
 }
 
-func (s *Users) UpdatePassWordUser(c *gin.Context) {
+func (s *Users) UpdatePasswordUser(c *gin.Context) {
 	userId, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
