@@ -34,21 +34,25 @@ func CIBuild() (*gorm.DB, error) {
 
 //local DB
 func LocalDatabase() (*gorm.DB, error) {
+	err_env := godotenv.Load(".env")
+	if err_env != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	dbdriver := os.Getenv("TEST_DB_DRIVER")
+	dbhost := os.Getenv("TEST_DB_HOST")
+	dbpassword := os.Getenv("TEST_DB_PASSWORD")
+	dbuser := os.Getenv("TEST_DB_USER")
+	dbname := os.Getenv("TEST_DB_NAME")
+	dbport := os.Getenv("TEST_DB_PORT")
+
+	//dbdriver := "mysql"
+	//dbhost := "127.0.0.1"
+	//dbpassword := "123456789aA@"
+	//dbuser := "dev"
+	//dbname := "user_04"
+	//dbport := "3306"
+
 	var err error
-	//dbdriver := os.Getenv("TEST_DB_DRIVER")
-	//host := os.Getenv("TEST_DB_HOST")
-	//password := os.Getenv("TEST_DB_PASSWORD")
-	//user := os.Getenv("TEST_DB_USER")
-	//dbname := os.Getenv("TEST_DB_NAME")
-	//port := os.Getenv("TEST_DB_PORT")
-
-	dbdriver := "mysql"
-	dbhost := "127.0.0.1"
-	dbpassword := "123456789aA@"
-	dbuser := "dev"
-	dbname := "user_04"
-	dbport := "3306"
-
 	DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbuser, dbpassword, dbhost, dbport, dbname)
 	conn, err := gorm.Open(dbdriver, DBURL)
 	if err != nil {

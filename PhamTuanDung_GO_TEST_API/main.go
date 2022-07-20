@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 
@@ -13,27 +14,31 @@ import (
 
 func main() {
 
-	dbdriver := "mysql"
-	dbhost := "127.0.0.1"
-	dbpassword := "123456789aA@"
-	dbuser := "dev"
-	dbname := "user_04"
-	dbport := "3306"
-	//dbdriver := os.Getenv("DB_DRIVER")
-	//dbhost := os.Getenv("DB_HOST")
-	//dbpassword := os.Getenv("DB_PASSWORD")
-	//dbuser := os.Getenv("DB_USER")
-	//dbname := os.Getenv("DB_NAME")
-	//dbport := os.Getenv("DB_PORT")
+	//dbdriver := "mysql"
+	//dbhost := "127.0.0.1"
+	//dbpassword := "123456789aA@"
+	//dbuser := "dev"
+	//dbname := "user_04"
+	//dbport := "3306"
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	dbdriver := os.Getenv("DB_DRIVER")
+	dbhost := os.Getenv("DB_HOST")
+	dbpassword := os.Getenv("DB_PASSWORD")
+	dbuser := os.Getenv("DB_USER")
+	dbname := os.Getenv("DB_NAME")
+	dbport := os.Getenv("DB_PORT")
 
 	// redis detail
-	//redis_host := os.Getenv("REDIS_HOST")
-	//redis_port := os.Getenv("REDIS_PORT")
-	//redis_password := os.Getenv("REDIS_PASSWORD")
+	redis_host := os.Getenv("REDIS_HOST")
+	redis_port := os.Getenv("REDIS_PORT")
+	redis_password := os.Getenv("REDIS_PASSWORD")
 
-	redis_host := "127.0.0.1"
-	redis_port := "6379"
-	redis_password := ""
+	//redis_host := "127.0.0.1"
+	//redis_port := "6379"
+	//redis_password := ""
 
 	services, err := persistence.NewRepositories(dbdriver, dbuser, dbpassword, dbport, dbhost, dbname)
 	//dsn := "dev:123456789aA@@tcp(127.0.0.1:3306)/user_02?charset=utf8mb4&parseTime=True&loc=Local"
